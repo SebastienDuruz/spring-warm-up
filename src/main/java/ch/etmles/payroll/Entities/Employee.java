@@ -12,14 +12,12 @@ public class Employee {
     private @Id
     @GeneratedValue Long id;
     private String name;
-    private String firstname;
     private String role;
 
     public Employee(){}
 
-    public Employee(String name, String firstname, String role){
+    public Employee(String name, String role){
         this.setName(name);
-        this.setFirstname(firstname);
         this.setRole(role);
     }
 
@@ -39,14 +37,6 @@ public class Employee {
         this.name = name;
     }
 
-    public String getFirstname(){
-        return this.firstname;
-    }
-
-    public void setFirstname(String firstname){
-        this.firstname = firstname;
-    }
-
     public String getRole(){
         return this.role;
     }
@@ -63,20 +53,18 @@ public class Employee {
             return false;
         return Objects.equals(this.id, employee.id)
                 && Objects.equals(this.name, employee.name)
-                && Objects.equals(this.firstname, employee.firstname)
                 && Objects.equals(this.role, employee.role);
     }
 
     @Override
     public int hashCode(){
-        return Objects.hash(this.id, this.name, this.firstname, this.role);
+        return Objects.hash(this.id, this.name, this.role);
     }
 
     @Override
     public String toString(){
         return "Employee{" + "id=" + this.getID() + ","
                 + " name='" + this.getName() + '\'' + ",  "
-                + " firstname='" + this.getFirstname() + '\'' + ",  "
                 + ",role='" + this.getRole() + '\'' + '}';
     }
 }

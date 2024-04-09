@@ -52,7 +52,6 @@ public class EmployeeController {
         return repository.findById(id)
                 .map(employee -> {
                     employee.setName(newEmployee.getName());
-                    employee.setFirstname(newEmployee.getFirstname());
                     employee.setRole(newEmployee.getRole());
                     return repository.save(employee);
                 })
