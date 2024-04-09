@@ -63,9 +63,14 @@ public class EmployeeController {
 
     /* curl sample :
     curl -i -X DELETE localhost:8080/employees/2
+    Note : use an employee id missing to throw the exception
     */
     @DeleteMapping("/employees/{id}")
     void deleteEmployee(@PathVariable Long id){
-        repository.deleteById(id);
+        if(repository.existsById(id)){
+            repository.deleteById(id);
+        }else{
+            throw new EmployeeDeletionException(id);
+        }
     }
 }
