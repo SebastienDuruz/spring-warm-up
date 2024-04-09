@@ -26,7 +26,7 @@ public class EmployeeController {
     /* curl sample :
     curl -i -X POST localhost:8080/employees ^
         -H "Content-type:application/json" ^
-        -d "{\"name\": \"Russel George\", \"role\": \"gardener\"}"
+        -d "{\"name\": \"Ricciardo\", \"firstname\": \"Daniel\", \"role\": \"cooker\"}"
     */
     @PostMapping("/employees")
     Employee newEmployee(@RequestBody Employee newEmployee){
@@ -43,15 +43,16 @@ public class EmployeeController {
     }
 
     /* curl sample :
-    curl -i -X PUT localhost:8080/employees/2 ^
+    curl -i -X PUT localhost:8080/employees/3 ^
         -H "Content-type:application/json" ^
-        -d "{\"name\": \"Samwise Bing\", \"role\": \"peer-to-peer\"}"
+        -d "{\"name\": \"Ricciardo\", \"firstname\": \"Daniel\", \"role\": \"lucky guy\"}"
      */
     @PutMapping("/employees/{id}")
     Employee replaceEmployee(@RequestBody Employee newEmployee, @PathVariable Long id) {
         return repository.findById(id)
                 .map(employee -> {
                     employee.setName(newEmployee.getName());
+                    employee.setFirstname(newEmployee.getFirstname());
                     employee.setRole(newEmployee.getRole());
                     return repository.save(employee);
                 })
@@ -62,7 +63,7 @@ public class EmployeeController {
     }
 
     /* curl sample :
-    curl -i -X DELETE localhost:8080/employees/2
+    curl -i -X DELETE localhost:8080/employees/3
     */
     @DeleteMapping("/employees/{id}")
     void deleteEmployee(@PathVariable Long id){
