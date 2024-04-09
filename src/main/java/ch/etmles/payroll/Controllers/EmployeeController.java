@@ -70,7 +70,7 @@ public class EmployeeController {
         if(repository.existsById(id)){
             repository.deleteById(id);
         }else{
-            throw new EmployeeDeletionException(id);
+            //TODO throw exception
         }
     }
 }
