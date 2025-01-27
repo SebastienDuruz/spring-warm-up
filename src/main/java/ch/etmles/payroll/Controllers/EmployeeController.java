@@ -3,6 +3,7 @@ package ch.etmles.payroll.Controllers;
 import ch.etmles.payroll.Entities.Employee;
 import ch.etmles.payroll.Repositories.EmployeeRepository;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpServerErrorException;
 
 import java.util.List;
 
@@ -70,7 +71,7 @@ public class EmployeeController {
         if(repository.existsById(id)){
             repository.deleteById(id);
         }else{
-            //TODO throw exception
+            throw new EmployeeDeletionException(id);
         }
     }
 }
