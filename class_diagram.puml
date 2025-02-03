@@ -1,0 +1,61 @@
+@startuml
+
+package "java.io" {
+    interface "Serializable"
+}
+
+package "java.lang" {
+    exception "RuntimeException"
+    exception "Exception"
+    exception "Throwable"
+
+    "RuntimeException" <|-- "Exception"
+    "Exception" <|-- "Throwable"
+    "Throwable" <|.. "Serializable"
+}
+
+package "org.springframework.data.jpa.repository" {
+    interface "JpaRepository"
+}
+
+package "ch.etmles.payroll" {
+
+    class "PayrollApplication" {
+    }
+
+    package "org.springframework.boot" {
+        class "SpringApplication"
+    }
+
+    package "Entites" {
+        class "Employee"
+    }
+
+    package "Repositories" {
+        interface "EmployeeRepository"
+        class "LoadDatabase"
+
+        "LoadDatabase" --> "EmployeeRepository"
+        "EmployeeRepository" <|-- "JpaRepository"
+    }
+
+    package "Controllers" {
+        class "EmployeeController" {
+            EmployeeController(EmployeeRepository repository)
+        }
+        class "EmployeeNotFoundAdvice"
+        exception "EmployeeNotFoundException"
+
+        "EmployeeController" --> "EmployeeNotFoundException"
+        "EmployeeController" --> "EmployeeNotFoundAdvice"
+        "EmployeeController" --> "EmployeeRepository"
+        "EmployeeController" --> "Employee"
+
+        "EmployeeNotFoundException" <|-- "RuntimeException"
+
+    }
+
+    "PayrollApplication" ..> "SpringApplication"
+}
+
+@enduml
