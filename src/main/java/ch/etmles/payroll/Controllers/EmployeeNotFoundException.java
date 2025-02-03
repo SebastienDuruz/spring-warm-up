@@ -1,8 +1,7 @@
 package ch.etmles.payroll.Controllers;
 
 public class EmployeeNotFoundException extends RuntimeException{
-
-    EmployeeNotFoundException(Long id){
+    EmployeeNotFoundException(long id){
         super("Could not find employee " + id);
     }
 }

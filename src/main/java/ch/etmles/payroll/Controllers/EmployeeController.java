@@ -3,6 +3,7 @@ package ch.etmles.payroll.Controllers;
 import ch.etmles.payroll.Entities.Employee;
 import ch.etmles.payroll.Repositories.EmployeeRepository;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpServerErrorException;
 
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class EmployeeController {
     /* curl sample :
     curl -i -X POST localhost:8080/employees ^
         -H "Content-type:application/json" ^
-        -d "{\"name\": \"Ricciardo\", \"firstname\": \"Daniel\", \"role\": \"cooker\"}"
+        -d "{\"name\": \"Russel George\", \"role\": \"gardener\"}"
     */
     @PostMapping("/employees")
     Employee newEmployee(@RequestBody Employee newEmployee){
@@ -43,9 +44,9 @@ public class EmployeeController {
     }
 
     /* curl sample :
-    curl -i -X PUT localhost:8080/employees/3 ^
+    curl -i -X PUT localhost:8080/employees/2 ^
         -H "Content-type:application/json" ^
-        -d "{\"name\": \"Ricciardo\", \"firstname\": \"Daniel\", \"role\": \"lucky guy\"}"
+        -d "{\"name\": \"Samwise Bing\", \"role\": \"peer-to-peer\"}"
      */
     @PutMapping("/employees/{id}")
     Employee replaceEmployee(@RequestBody Employee newEmployee, @PathVariable Long id) {
@@ -63,10 +64,15 @@ public class EmployeeController {
     }
 
     /* curl sample :
-    curl -i -X DELETE localhost:8080/employees/3
+    curl -i -X DELETE localhost:8080/employees/2
+    Note : use an employee id missing to throw the exception
     */
     @DeleteMapping("/employees/{id}")
     void deleteEmployee(@PathVariable Long id){
-        repository.deleteById(id);
+        if(repository.existsById(id)){
+            repository.deleteById(id);
+        }else{
+            throw new EmployeeDeletionException(id);
+        }
     }
 }
