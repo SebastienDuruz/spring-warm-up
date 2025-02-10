@@ -15,12 +15,17 @@ public class Employee {
     private String lastName;
     private String role;
 
+
+
+    private String email;
+
     public Employee(){}
 
-    public Employee(String firstName, String lastName, String role){
+    public Employee(String firstName, String lastName, String role, String email) {
         this.setFirstName(firstName);
         this.setLastName(lastName);
         this.setRole(role);
+        this.setEmail(email);
     }
 
     public Long getID(){
@@ -55,6 +60,14 @@ public class Employee {
         this.role = role;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     @Override
     public boolean equals(Object o){
         if(this == o)
@@ -64,7 +77,8 @@ public class Employee {
         return Objects.equals(this.id, employee.id)
                 && Objects.equals(this.firstName, employee.firstName)
                 && Objects.equals(this.lastName, employee.lastName)
-                && Objects.equals(this.role, employee.role);
+                && Objects.equals(this.role, employee.role)
+                && Objects.equals(this.email, employee.email);
     }
 
     @Override
@@ -77,6 +91,7 @@ public class Employee {
         return "Employee{" + "id=" + this.getID() + ","
                 + " firstName='" + this.getFirstName() + '\'' + ",  "
                 + " lastName='" + this.getLastName() + '\'' + ",  "
+                + " email='" + this.getEmail() + '\'' + ",  "
                 + ",role='" + this.getRole() + '\'' + '}';
     }
 }
