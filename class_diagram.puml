@@ -28,7 +28,22 @@ package "ch.etmles.payroll" {
     }
 
     package "Entites" {
-        class "Employee"
+        class "Employee" {
+            - id : Long [Unique]
+            - firstName : String
+            - lastName : String
+            - email : String [Unique]
+            - role : String
+            - department : Department
+        }
+
+        class "Department" {
+            - id : Long [Unique]
+            - name : String
+            - employees : List<Employee>
+        }
+
+        "Department" <--> "Employee"
     }
 
     package "Repositories" {
