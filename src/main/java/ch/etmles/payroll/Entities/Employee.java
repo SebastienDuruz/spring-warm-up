@@ -1,8 +1,7 @@
 package ch.etmles.payroll.Entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import ch.etmles.payroll.Repositories.DepartmentRepository;
+import jakarta.persistence.*;
 
 import java.util.Objects;
 
@@ -15,6 +14,12 @@ public class Employee {
     private String lastName;
     private String role;
     private String email;
+
+
+
+    @ManyToOne
+    @JoinColumn(name = "departmentId")
+    private Department department;
 
     public Employee(){}
 
@@ -63,6 +68,14 @@ public class Employee {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Department getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(Department department) {
+        this.department = department;
     }
 
     @Override
