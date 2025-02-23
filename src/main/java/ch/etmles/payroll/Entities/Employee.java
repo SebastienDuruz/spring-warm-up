@@ -13,9 +13,9 @@ public class Employee {
     private String firstName;
     private String lastName;
     private String role;
+
+    @Column(unique=true)
     private String email;
-
-
 
     @ManyToOne
     @JoinColumn(name = "departmentId")
