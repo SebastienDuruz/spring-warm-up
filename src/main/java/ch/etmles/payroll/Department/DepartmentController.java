@@ -38,7 +38,7 @@ public class DepartmentController {
     @GetMapping("/departments/{id}")
     Department one(@PathVariable Long id) {
         return departmentRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Department not found"));
+                .orElseThrow(() -> new DepartmentNotFoundException(id));
     }
 
     /* curl sample :
@@ -68,17 +68,7 @@ public class DepartmentController {
         if (departmentRepository.existsById(id)) {
             departmentRepository.deleteById(id);
         } else {
-            throw new IllegalArgumentException("Department not found");
-        }
-    }
-
-    @PatchMapping("/departments/{id}/employee")
-    void addEmployeeToDepartment(@PathVariable long departmentId, @RequestBody Employee newEmployee) {
-        if (departmentRepository.existsById(departmentId)) {
-            departmentRepository.findById(departmentId).map(department -> {
-                department.addEmployee(newEmployee);
-                return departmentRepository.save(department);
-            });
+            throw new DepartmentNotFoundException(id);
         }
     }
 }
