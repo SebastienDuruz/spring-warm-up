@@ -1,9 +1,9 @@
-package ch.etmles.payroll.Controllers;
+package ch.etmles.payroll.Employee;
 
-import ch.etmles.payroll.Entities.Employee;
-import ch.etmles.payroll.Repositories.EmployeeRepository;
+import ch.etmles.payroll.Department.Department;
+import ch.etmles.payroll.Department.DepartmentNotFoundException;
+import ch.etmles.payroll.Department.DepartmentRepository;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpServerErrorException;
 
 import java.util.List;
 
@@ -11,9 +11,13 @@ import java.util.List;
 public class EmployeeController {
 
     private final EmployeeRepository repository;
+    private final DepartmentRepository departmentRepository;
+    private final EmployeeRepository employeeRepository;
 
-    EmployeeController(EmployeeRepository repository){
+    EmployeeController(EmployeeRepository repository, DepartmentRepository departmentRepository, EmployeeRepository employeeRepository){
         this.repository = repository;
+        this.departmentRepository = departmentRepository;
+        this.employeeRepository = employeeRepository;
     }
 
     /* curl sample :
@@ -52,8 +56,11 @@ public class EmployeeController {
     Employee replaceEmployee(@RequestBody Employee newEmployee, @PathVariable Long id) {
         return repository.findById(id)
                 .map(employee -> {
-                    employee.setName(newEmployee.getName());
+                    employee.setFirstName(newEmployee.getFirstName());
+                    employee.setLastName(newEmployee.getLastName());
                     employee.setRole(newEmployee.getRole());
+                    employee.setEmail(newEmployee.getEmail());
+                    employee.setDepartment(newEmployee.getDepartment());
                     return repository.save(employee);
                 })
                 .orElseGet(() -> {
@@ -73,5 +80,21 @@ public class EmployeeController {
         }else{
             throw new EmployeeDeletionException(id);
         }
+    }
+
+    /*
+    curl -i -X PATCH http://localhost:8080/employees/2   -H "Content-Type: application/json"  -d "{\"department_id\": 1}"
+     */
+    @PatchMapping("/employees/{id}")
+    Employee updateEmployeeDepartment(@PathVariable Long id, @RequestBody Long departmentId) {
+
+        Department department = departmentRepository.findById(departmentId)
+                .orElseThrow(() -> new DepartmentNotFoundException(departmentId));
+
+        return employeeRepository.findById(id)
+                .map(employee -> {
+                    employee.setDepartment(department);
+                    return repository.save(employee);
+                }).orElseThrow(() -> new EmployeeNotFoundException(id));
     }
 }

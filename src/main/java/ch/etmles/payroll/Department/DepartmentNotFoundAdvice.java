@@ -1,0 +1,17 @@
+package ch.etmles.payroll.Department;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@ControllerAdvice
+public class DepartmentNotFoundAdvice {
+
+    @ResponseBody
+    @ExceptionHandler(DepartmentNotFoundException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    String employeeNotFoundHandler(DepartmentNotFoundException ex){
+        return ex.getMessage();
+    }
+}

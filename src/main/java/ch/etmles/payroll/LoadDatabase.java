@@ -1,0 +1,27 @@
+package ch.etmles.payroll;
+
+import ch.etmles.payroll.Department.Department;
+import ch.etmles.payroll.Department.DepartmentRepository;
+import ch.etmles.payroll.Employee.Employee;
+import ch.etmles.payroll.Employee.EmployeeRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class LoadDatabase {
+    private static final Logger log = LoggerFactory.getLogger(LoadDatabase.class);
+
+    @Bean
+    CommandLineRunner initDatabase(EmployeeRepository repository, DepartmentRepository departmentRepository){
+        Department comptaDepartment = new Department("Compta");
+        return args->{
+            log.info("Preloading " + departmentRepository.save(comptaDepartment));
+            log.info("Preloading " + repository.save(new Employee("Russell", "George", "burglar", "russell.george@gigamail.com", comptaDepartment)));
+            log.info("Preloading " + repository.save(new Employee("Hamilton", "Lewis", "thief", "hamilton.lewis@gigamail.com", null)));
+
+        };
+    }
+}
