@@ -1,4 +1,4 @@
-package ch.etmles.payroll.Controllers.Employee;
+package ch.etmles.payroll.Employee;
 
 public class EmployeeDeletionException extends RuntimeException{
 

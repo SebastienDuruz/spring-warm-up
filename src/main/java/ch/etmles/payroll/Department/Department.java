@@ -1,5 +1,6 @@
-package ch.etmles.payroll.Entities;
+package ch.etmles.payroll.Department;
 
+import ch.etmles.payroll.Employee.Employee;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;

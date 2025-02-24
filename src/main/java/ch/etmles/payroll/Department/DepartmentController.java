@@ -1,8 +1,6 @@
-package ch.etmles.payroll.Controllers.Department;
+package ch.etmles.payroll.Department;
 
-import ch.etmles.payroll.Entities.Department;
-import ch.etmles.payroll.Entities.Employee;
-import ch.etmles.payroll.Repositories.DepartmentRepository;
+import ch.etmles.payroll.Employee.Employee;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

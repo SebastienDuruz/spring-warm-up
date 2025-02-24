@@ -1,4 +1,4 @@
-package ch.etmles.payroll.Controllers.Employee;
+package ch.etmles.payroll.Employee;
 
 public class EmployeeNotFoundException extends RuntimeException{
     EmployeeNotFoundException(long id){

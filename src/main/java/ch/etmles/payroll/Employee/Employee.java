@@ -1,6 +1,6 @@
-package ch.etmles.payroll.Entities;
+package ch.etmles.payroll.Employee;
 
-import ch.etmles.payroll.Repositories.DepartmentRepository;
+import ch.etmles.payroll.Department.Department;
 import jakarta.persistence.*;
 
 import java.util.Objects;
