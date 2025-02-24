@@ -23,11 +23,12 @@ public class Employee {
 
     public Employee(){}
 
-    public Employee(String firstName, String lastName, String role, String email) {
+    public Employee(String firstName, String lastName, String role, String email, Department department) {
         this.setFirstName(firstName);
         this.setLastName(lastName);
         this.setRole(role);
         this.setEmail(email);
+        this.setDepartment(department);
     }
 
     public Long getID(){
@@ -88,7 +89,8 @@ public class Employee {
                 && Objects.equals(this.firstName, employee.firstName)
                 && Objects.equals(this.lastName, employee.lastName)
                 && Objects.equals(this.role, employee.role)
-                && Objects.equals(this.email, employee.email);
+                && Objects.equals(this.email, employee.email)
+                && Objects.equals(this.department, employee.department);
     }
 
     @Override
@@ -102,6 +104,7 @@ public class Employee {
                 + " firstName='" + this.getFirstName() + '\'' + ",  "
                 + " lastName='" + this.getLastName() + '\'' + ",  "
                 + " email='" + this.getEmail() + '\'' + ",  "
-                + ",role='" + this.getRole() + '\'' + '}';
+                + " role='" + this.getRole() + '\'' + ",  "
+                + ",department='" + (this.getDepartment() == null ? "null" : this.getDepartment().getName()) + '\'' + '}';
     }
 }
