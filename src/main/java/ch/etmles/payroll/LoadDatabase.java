@@ -13,15 +13,4 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class LoadDatabase {
     private static final Logger log = LoggerFactory.getLogger(LoadDatabase.class);
-
-    @Bean
-    CommandLineRunner initDatabase(EmployeeRepository repository, DepartmentRepository departmentRepository){
-        Department comptaDepartment = new Department("Compta");
-        return args->{
-            log.info("Preloading " + departmentRepository.save(comptaDepartment));
-            log.info("Preloading " + repository.save(new Employee("Russell", "George", "burglar", "russell.george@gigamail.com", comptaDepartment)));
-            log.info("Preloading " + repository.save(new Employee("Hamilton", "Lewis", "thief", "hamilton.lewis@gigamail.com", null)));
-
-        };
-    }
 }
