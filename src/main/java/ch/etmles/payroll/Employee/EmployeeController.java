@@ -1,8 +1,8 @@
 package ch.etmles.payroll.Employee;
 
 import ch.etmles.payroll.Department.Department;
-import ch.etmles.payroll.Department.DepartmentNotFoundException;
 import ch.etmles.payroll.Department.DepartmentRepository;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,14 +10,12 @@ import java.util.List;
 @RestController
 public class EmployeeController {
 
-    private final EmployeeRepository repository;
-    private final DepartmentRepository departmentRepository;
     private final EmployeeRepository employeeRepository;
+    private final EmployeeService employeeService;
 
-    EmployeeController(EmployeeRepository repository, DepartmentRepository departmentRepository, EmployeeRepository employeeRepository){
-        this.repository = repository;
-        this.departmentRepository = departmentRepository;
-        this.employeeRepository = employeeRepository;
+    EmployeeController(EmployeeRepository repository, EmployeeService employeeService){
+        this.employeeRepository = repository;
+        this.employeeService = employeeService;
     }
 
     /* curl sample :
@@ -25,7 +23,7 @@ public class EmployeeController {
     */
     @GetMapping("/employees")
     List<Employee> all(){
-        return repository.findAll();
+        return employeeRepository.findAll();
     }
 
     /* curl sample :
@@ -35,7 +33,7 @@ public class EmployeeController {
     */
     @PostMapping("/employees")
     Employee newEmployee(@RequestBody Employee newEmployee){
-        return repository.save(newEmployee);
+        return employeeRepository.save(newEmployee);
     }
 
     /* curl sample :
@@ -43,7 +41,7 @@ public class EmployeeController {
     */
     @GetMapping("/employees/{id}")
     Employee one(@PathVariable Long id){
-        return repository.findById(id)
+        return employeeRepository.findById(id)
                 .orElseThrow(() -> new EmployeeNotFoundException(id));
     }
 
@@ -54,18 +52,18 @@ public class EmployeeController {
      */
     @PutMapping("/employees/{id}")
     Employee replaceEmployee(@RequestBody Employee newEmployee, @PathVariable Long id) {
-        return repository.findById(id)
+        return employeeRepository.findById(id)
                 .map(employee -> {
                     employee.setFirstName(newEmployee.getFirstName());
                     employee.setLastName(newEmployee.getLastName());
                     employee.setRole(newEmployee.getRole());
                     employee.setEmail(newEmployee.getEmail());
                     employee.setDepartment(newEmployee.getDepartment());
-                    return repository.save(employee);
+                    return employeeRepository.save(employee);
                 })
                 .orElseGet(() -> {
                     newEmployee.setId(id);
-                    return repository.save(newEmployee);
+                    return employeeRepository.save(newEmployee);
                 });
     }
 
@@ -75,8 +73,8 @@ public class EmployeeController {
     */
     @DeleteMapping("/employees/{id}")
     void deleteEmployee(@PathVariable Long id){
-        if(repository.existsById(id)){
-            repository.deleteById(id);
+        if(employeeRepository.existsById(id)){
+            employeeRepository.deleteById(id);
         }else{
             throw new EmployeeDeletionException(id);
         }
@@ -84,17 +82,15 @@ public class EmployeeController {
 
     /*
     curl -i -X PATCH http://localhost:8080/employees/2   -H "Content-Type: application/json"  -d "{\"department_id\": 1}"
+    curl -H "Content-type:application/json" --data '{"id": 1}' -X PATCH http://localhost:8080/employees/2
      */
     @PatchMapping("/employees/{id}")
-    Employee updateEmployeeDepartment(@PathVariable Long id, @RequestBody Long departmentId) {
-
-        Department department = departmentRepository.findById(departmentId)
-                .orElseThrow(() -> new DepartmentNotFoundException(departmentId));
-
-        return employeeRepository.findById(id)
-                .map(employee -> {
-                    employee.setDepartment(department);
-                    return repository.save(employee);
-                }).orElseThrow(() -> new EmployeeNotFoundException(id));
+    Employee updateEmployeeDepartment(@PathVariable Long id, @RequestBody Department department) {
+        if(department == null){
+            return employeeService.releaseEmployee(id);
+        }
+        else {
+            return employeeService.hireEmployee(id, department.getId());
+        }
     }
 }
