@@ -1,0 +1,57 @@
+@startuml
+
+package "ch.etmles.payroll" {
+
+    package "Department" {
+        class "Department" {
+            - id : Long [Unique]
+            - name : String
+        }
+
+        class "DepartmentController" {
+            DepartmentController(DepartmentRepository repository)
+        }
+
+        class "DepartmentNotFoundAdvice"
+
+        exception "DepartmentNotFoundException"
+        interface "DepartmentRepository"
+
+        "DepartmentController" --> "DepartmentNotFoundException"
+        "DepartmentController" --> "DepartmentNotFoundAdvice"
+        "DepartmentController" --> "DepartmentRepository"
+        "DepartmentController" --> "Department"
+    }
+
+    package "Employee" {
+        class "Employee" {
+            - id : Long [Unique]
+            - firstName : String
+            - lastName : String
+            - email : String [Unique]
+            - role : String
+            - department : Department
+        }
+
+        class "EmployeeController" {
+            EmployeeController(EmployeeRepository repository)
+        }
+
+        class "EmployeeNotFoundAdvice"
+        exception "EmployeeNotFoundException"
+
+        "EmployeeController" --> "EmployeeNotFoundException"
+        "EmployeeController" --> "EmployeeNotFoundAdvice"
+        "EmployeeController" --> "EmployeeRepository"
+        "EmployeeController" --> "Employee"
+
+        interface "EmployeeRepository"
+    }
+
+    class "LoadDatabase"
+
+    "LoadDatabase" --> "EmployeeRepository"
+    "LoadDatabase" --> "DepartmentRepository"
+}
+
+@enduml
