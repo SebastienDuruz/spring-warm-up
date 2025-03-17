@@ -1,0 +1,35 @@
+@startuml
+
+actor User
+participant "EmployeeController: Controller"
+participant "EmployeeService: Service"
+participant "DepartmentRepository: Repository"
+participant "EmployeeRepository: Repository"
+participant "Employee: Entity"
+
+User -> "EmployeeController: Controller": PATCH /employees/{id} { department: Department }
+
+"EmployeeController: Controller" -> "EmployeeService: Service": hireEmployee(Long: employeeId, Long: departmentId)
+"EmployeeService: Service" -> "DepartmentRepository: Repository": findById(Long: departmentId)
+"DepartmentRepository: Repository" --> "EmployeeService: Service": Department or DepartmentNotFoundException
+"EmployeeService: Service" --> "EmployeeController: Controller": Throw DepartmentNotFoundException
+"EmployeeService: Service" -> "EmployeeRepository: Repository": findById(Long: employeeId)
+"EmployeeRepository: Repository" --> "EmployeeService: Service": Employee or EmployeeNotFoundException
+"EmployeeService: Service" --> "EmployeeController: Controller": Throw EmployeeNotFoundException
+"EmployeeService: Service" -> "Employee: Entity": setDepartment(Department: department)
+"EmployeeService: Service" -> "EmployeeRepository: Repository": save(Employee: employee)
+"EmployeeRepository: Repository" --> "EmployeeService: Service": Employee
+"EmployeeController: Controller" --> User: "Employee: Entity"
+
+User -> "EmployeeController: Controller": PATCH /employees/{id} { department: null }
+
+"EmployeeController: Controller" -> "EmployeeService: Service": releaseEmployee(Long: employeeId)
+"EmployeeService: Service" -> "EmployeeRepository: Repository": findById(Long: employeeId)
+"EmployeeRepository: Repository" --> "EmployeeService: Service": Employee or EmployeeNotFoundException
+"EmployeeService: Service" --> "EmployeeController: Controller": Throw EmployeeNotFoundException
+"EmployeeService: Service" -> "Employee: Entity": setDepartment(null)
+"EmployeeService: Service" -> "EmployeeRepository: Repository": save(Employee: employee)
+"EmployeeRepository: Repository" --> "EmployeeService: Service": "Employee: Entity"
+"EmployeeController: Controller" --> User: "Employee: Entity"
+
+@enduml
